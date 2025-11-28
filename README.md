@@ -18,7 +18,6 @@
 
 <a href="https://beto.group"><img src="https://img.shields.io/badge/WEBSITE-7A46F1?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgY2xhc3M9Imx1Y2lkZSBsdWNpZGUtZ2xvYmUiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PHBhdGggZD0iTTEyIDJBNTYuNDggNTYuNDggMCAwIDAgNiA2djEyYTQ1LjQxIDQ1LjQxIDAgMCAwIDYgNHoiLz48cGF0aCBkPSJNMTIgMmE1Ni40OCAzNS40OCAwIDAgMSA2IDZ2MTJhNDUuNDEgNDUuNDEgMCAwIDEtNiA0eiIvPjwvc3ZnPg==" alt="Wᴇʙsɪᴛᴇ"></a>&nbsp;<a href="https://discord.com/invite/6rDp4q4Y2B"><img src="https://img.shields.io/badge/DISCORD-7A46F1?style=for-the-badge&logo=discord&logoColor=white" alt="Jᴏɪɴ ᴏᴜʀ Dɪsᴄᴏʀᴅ ᴄᴏᴍᴍᴜɴɪᴛʏ"></a>&nbsp;<a href="https://ko-fi.com/betogroup"><img src="https://img.shields.io/badge/Support-7A46F1?style=for-the-badge&logo=ko-fi&logoColor=white" alt="Sᴜᴘᴘᴏʀᴛ ᴜs ᴏɴ Kᴏ-ғɪ"></a>
 
-<br/><br><br/>
 
 <hr>
 
