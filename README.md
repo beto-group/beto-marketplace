@@ -10,8 +10,6 @@
 
 </div>
 
-----
-
 <div align="center">
 
 <!-- TOP 3 BADGES (PURPLE) -->
