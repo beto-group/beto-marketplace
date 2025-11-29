@@ -1,9 +1,18 @@
-import { Notice, Plugin, WorkspaceLeaf } from 'obsidian';
+import { Notice, Plugin, WorkspaceLeaf, requestUrl, RequestUrlParam } from 'obsidian';
 import { BetoMarketplaceSettings, DEFAULT_SETTINGS, BetoMarketplaceSettingTab } from './src/settings';
 import { DatacoreDownloader } from './src/downloader';
 import { AuthManager } from './src/auth';
 import { ComponentManager } from './src/manager';
-import { PROTOCOL_ACTION_AUTH, PROTOCOL_ACTION_DEPLOY } from './src/constants';
+import { PROTOCOL_ACTION_AUTH, PROTOCOL_ACTION_DEPLOY, API_URL, PLUGIN_HEADERS } from './src/constants';
+
+export interface BetoMarketplaceAPI {
+	apiVersion: string;
+	isAuthenticated(): boolean;
+	getUser(): Promise<any | null>;
+	login(code: string): Promise<boolean>;
+	logout(): void;
+	fetch(endpoint: string, options?: RequestUrlParam): Promise<any>;
+}
 
 export default class BetoMarketplace extends Plugin {
 	settings: BetoMarketplaceSettings;
@@ -11,6 +20,7 @@ export default class BetoMarketplace extends Plugin {
 	authManager: AuthManager;
 	componentManager: ComponentManager;
 	settingTab: BetoMarketplaceSettingTab;
+	api: BetoMarketplaceAPI;
 
 	async onload() {
 		await this.loadSettings();
@@ -23,6 +33,65 @@ export default class BetoMarketplace extends Plugin {
 		this.authManager = new AuthManager(this.app, this.settings, this.saveSettings.bind(this), () => {
 			this.settingTab.updateUserAndRefreshAccount();
 		});
+
+		// Initialize Public API
+		this.api = {
+			apiVersion: "1.0.0",
+			isAuthenticated: () => !!this.settings.authToken,
+			getUser: async () => {
+				if (!this.settings.authToken) return null;
+				try {
+					const response = await requestUrl({
+						url: `${API_URL}/api/auth/me`,
+						method: 'GET',
+						headers: {
+							'Authorization': `Bearer ${this.settings.authToken}`,
+							'X-Device-Id': this.settings.deviceId,
+							...PLUGIN_HEADERS
+						}
+					});
+					if (response.status === 200) return response.json.user;
+					return null;
+				} catch (e) {
+					console.error("Beto API: Failed to fetch user", e);
+					return null;
+				}
+			},
+			login: async (code: string) => {
+				const token = await this.authManager.handleAuthCallback(code);
+				return !!token;
+			},
+			logout: () => {
+				this.authManager.logout();
+			},
+			fetch: async (endpoint: string, options: RequestUrlParam = { url: '' }) => {
+				// Ensure endpoint starts with /
+				const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+				const url = `${API_URL}${path}`;
+				
+				const headers: Record<string, string> = {
+					'Content-Type': 'application/json',
+					'X-Device-Id': this.settings.deviceId,
+					...PLUGIN_HEADERS,
+					...(options.headers as Record<string, string> || {})
+				};
+
+				if (this.settings.authToken) {
+					headers['Authorization'] = `Bearer ${this.settings.authToken}`;
+				}
+
+				const response = await requestUrl({
+					...options,
+					url,
+					headers
+				});
+
+				if (response.status >= 200 && response.status < 300) {
+					return response.json;
+				}
+				throw new Error(`API Error: ${response.status} ${response.text}`);
+			}
+		};
 
 		this.addRibbonIcon('box', 'Beto Marketplace', () => {
 			this.openSettings();
